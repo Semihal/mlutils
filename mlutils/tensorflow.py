@@ -1,9 +1,9 @@
 import os
 from typing import Union, List
+from tensorflow.python.client import device_lib
 
 
 def set_used_gpu(gpu_ids: Union[List[int], int]):
-    from tensorflow.python.client import device_lib
     all_gpu_available = [
         int(device.name.split(':')[-1])
         for device in device_lib.list_local_devices()
