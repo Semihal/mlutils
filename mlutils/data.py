@@ -15,6 +15,15 @@ def chunk_to_batch(x: Iterable, batch_size: int):
     -------
     List
         batches list of x.
+
+    Examples
+    -------
+    >>> from mlutils.data import chunk_to_batch
+
+    >>> data = list(range(0, 9))
+    >>> batches = chunk_to_batch(data, batch_size=4)
+    >>> batches
+    [[0, 1, 2, 3], [4, 5, 6, 7], [8]]
     """
     return [
         x[i:i+batch_size]
