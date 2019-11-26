@@ -4,6 +4,21 @@ from tensorflow.python.client import device_lib
 
 
 def set_used_gpu(gpu_ids: Union[List[int], int]):
+    """
+    Specify for CUDA which GPU(s) to be used for computing.
+    Set environment variable CUDA_DEVICE_ORDER and CUDA_VISIBLE_DEVICES.
+
+    Parameters
+    ----------
+    gpu_ids : int or array-like of int
+        if gpu_ids is a list, then it should be contains GPU IDs.
+        if gpu_ids if int, then it should be equal GPU id.
+
+    Raises
+    ----------
+    GPUNotAvailable: if GPU is not available.
+
+    """
     all_gpu_available = [
         int(device.name.split(':')[-1])
         for device in device_lib.list_local_devices()
@@ -27,6 +42,9 @@ def set_used_gpu(gpu_ids: Union[List[int], int]):
 
 
 def set_used_cpu():
+    """
+    Specifies for CUDA to use the GPU for computing.
+    """
     os.environ['CUDA_DEVICE_ORDER'] = 'PCI_BUS_ID'  # see issue #152
     os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 
