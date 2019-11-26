@@ -1,2 +1,5 @@
 tensorflow
 opencv-python
+numpy
+pandas
+scipy
