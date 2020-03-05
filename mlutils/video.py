@@ -58,7 +58,7 @@ class VideoReader:
         self.frame_limit = frame_limit
 
         self.path = check_path_type(file_names, check_exists=True, as_list=False)
-        self.video = cv2.VideoCapture(self.path)
+        self.video = cv2.VideoCapture(str(self.path))
         if not self.video.isOpened():
             raise IOError('Video {} cannot be opened'.format(self.path))
 
@@ -106,7 +106,7 @@ def get_specific_frame(path_to_video: PathType, frame_id: int):
     config_for_reader = {
         cv2.CAP_PROP_POS_FRAMES: frame_id
     }
-    reader = VideoReader(path_to_video, config_for_reader)
+    reader = VideoReader(path_to_video, None, config_for_reader)
     try:
         return next(reader)
     except StopIteration:
