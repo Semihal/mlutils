@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Optional
 
 import cv2
 
@@ -42,33 +43,41 @@ class ImagesReader:
 
 class VideoReader:
 
-    def __init__(self, file_names: PathsType, config=None):
+    def __init__(self, file_names: PathsType, frame_limit: Optional[int], cv_config=None):
         """
         Class for iterate by video frames.
         Parameters
         ----------
         file_names:
             Path to video file for future frame iterations.
-        config:
+        frame_limit: Optional[int]
+            Get only the first frame_limit frames.
+        cv_config: dict
             Config for cv2.set function.
         """
+        self.frame_limit = frame_limit
+
         self.path = check_path_type(file_names, check_exists=True, as_list=False)
         self.video = cv2.VideoCapture(self.path)
         if not self.video.isOpened():
             raise IOError('Video {} cannot be opened'.format(self.path))
 
-        self.config = config
-        if config is not None:
-            for key, value in config.items():
+        self.config = cv_config
+        if cv_config is not None:
+            for key, value in cv_config.items():
                 self.video.set(key, value)
 
     def __iter__(self):
+        self._current_id = 0
         return self
 
     def __next__(self):
+        if self.frame_limit is not None and self._current_id >= self.frame_limit:
+            raise StopIteration
         was_read, img = self.video.read()
         if not was_read:
             raise StopIteration
+        self._current_id += 1
         return img
 
 
