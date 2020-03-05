@@ -26,17 +26,17 @@ def check_path_type(paths: Union[PathType, PathsType], check_exists=True, as_lis
     -------
         ValueError: if path is not exists or if as_list=True but paths contain more than 1 elements.
     """
-    new_paths = paths
-    if not isinstance(new_paths, List):
-        paths = [new_paths]
+    paths = paths[:]  # copy
+    if not isinstance(paths, list):
+        paths = [paths]
     elif not as_list and len(paths) > 1:
         raise ValueError(f'Output cannot be not list, because input is list with len={len(paths)}')
 
-    for i, path in enumerate(new_paths):
-        if isinstance(new_paths, str):
-            path = Path(new_paths)
+    for i, path in enumerate(paths):
+        if isinstance(path, str):
+            path = Path(path)
         if check_exists and not path.exists():
             raise ValueError(f'Path {path} is not exists.')
-        new_paths[i] = path
+        paths[i] = path
 
     return paths if as_list else paths[0]
